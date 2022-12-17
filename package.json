@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon -e js,ejs",
+    "start:prod": "node index.js",
+    "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
+    "test": "NODE_ENV=test jest --detectOpenHandles",
+    "prepare": "husky install"
+ 
   },
   "lint-staged": {
     "*.js": [
@@ -22,13 +26,6 @@
     "pg": "^8.8.0",
     "sequelize": "^6.23.2"
   },
-  "scripts": {
-    "start": "nodemon -e js,ejs",
-    "start:prod": "node index.js",
-    "pretest": "NODE_ENV=test npx sequelize-cli db:drop && NODE_ENV=test npx sequelize-cli db:create",
-    "test": "NODE_ENV=test jest --detectOpenHandles",
-    "prepare": "husky install"
-  },
   "devDependencies": {
     "eslint": "^8.24.0",
     "husky": "^8.0.1",
@@ -39,4 +36,6 @@
     "sequelize-cli": "^6.5.1",
     "supertest": "^6.2.4"
   }
+
+ 
 }
