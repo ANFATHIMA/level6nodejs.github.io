@@ -1,5 +1,7 @@
 body {
-background: white;
+  font-family:verdana;
+
+background: #F8BBD0;
 }
 
 .Todo-Item:hover .trash-icon{
