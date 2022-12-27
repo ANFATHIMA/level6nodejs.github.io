@@ -72,7 +72,7 @@
         <div class="flex-none">
           <button
             type="submit"
-            class="text-white bg-green-600 hover:bg-green-700 font-medium rounded text-sm px-5 py-2 mr-2 mb-2"
+            class="text-black bg-white-600 hover:bg-green-700 font-medium rounded text-sm px-5 py-2 mr-2 mb-2"
           >
             Add
           </button>
@@ -84,7 +84,7 @@
     <div class="mt-2 flex flex-col justify-start w-2/5">
       <div class="flex gap-2 items-center w-2/5 justify-start">
         <h5>Overdue</h5>
-        <p class="bg-gray-300 flex items-center p-2 px-4 rounded-full"><%= overdue.length %></p>
+        <p class="bg-white-200 flex items-center p-2 px-4 rounded-full"><%= overdue.length %></p>
       </div>
       <ul class="list-none pl-4 flex flex-col justify-start pl-12 w-2/5">
         <% for(var i=0; i<overdue.length; i++) {%>
@@ -128,7 +128,7 @@
   
       <div class="flex gap-2 items-center">
         <h5>Due Today</h5>
-        <p class="bg-gray-300 flex items-center p-2 px-4 rounded-full"><%= today.length %></p>
+        <p class="bg-white-200 flex items-center p-2 px-4 rounded-full"><%= today.length %></p>
       </div>
       <ul class="list-none pl-4">
         <% for(var i=0; i<today.length; i++) {%>
@@ -172,7 +172,7 @@
 
       <div class="flex gap-2 items-center">
         <h5>Due Later</h5>
-        <p class="bg-gray-300 flex items-center p-2 px-4 rounded-full"><%= later.length %></p>
+        <p class="bg-white-200 flex items-center p-2 px-4 rounded-full"><%= later.length %></p>
       </div>
       <ul class="list-none pl-4">
         <% for(var i=0; i<later.length; i++) {%>
@@ -216,7 +216,7 @@
 
       <div class="flex gap-2 items-center">
         <h5>Completed</h5>
-        <p class="bg-gray-300 flex items-center p-2 px-4 rounded-full"><%= complete.length %></p>
+        <p class="bg-white-200 flex items-center p-2 px-4 rounded-full"><%= complete.length %></p>
       </div>
       <ul class="list-none pl-4">
         <% for(var i=0; i<complete.length; i++) {%>
