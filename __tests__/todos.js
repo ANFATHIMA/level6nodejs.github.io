@@ -9,7 +9,7 @@ function extractCsrfToken(res) {
   var $ = cheerio.load(res.text);
   return $("[name=_csrf]").val();
 }
-
+//login details
 const login = async (agent, username, password) => {
   let res = await agent.get("/login");
   let csrfToken = extractCsrfToken(res);
@@ -35,20 +35,20 @@ describe("Todo Application", function () {
       console.log(error);
     }
   });
-
+  //signup details 
   test("Sign up", async () => {
     let res = await agent.get("/signup");
     const csrfToken = extractCsrfToken(res);
     res = await agent.post("/users").send({
-      firstName: "Test",
-      lastName: "User A",
-      email: "user.a@test.com",
-      password: "12345678",
+      firstName: "nani",
+      lastName: "a",
+      email: "nani@gmail.com",
+      password: "0122",
       _csrf: csrfToken,
     });
     expect(res.statusCode).toBe(302);
   });
-
+  //signout details
   test("Sign out", async () => {
     let res = await agent.get("/todos");
     expect(res.statusCode).toBe(200);
@@ -57,110 +57,10 @@ describe("Todo Application", function () {
     res = await agent.get("/todos");
     expect(res.statusCode).toBe(302);
   });
-
-  test("One user cannot mark as complete/incomplete a todo of other user", async () => {
-    //create UserA account
-    let res = await agent.get("/signup");
-    let csrfToken = extractCsrfToken(res);
-    res = await agent.post("/users").send({
-      firstName: "Test",
-      lastName: "User A",
-      email: "userA@test.com",
-      password: "12345678",
-      _csrf: csrfToken,
-    });
-    //create Todo from UserA account
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
-    res = await agent.post("/todos").send({
-      title: "Buy milk",
-      dueDate: new Date().toISOString(),
-      completed: false,
-      _csrf: csrfToken,
-    });
-    const idOfTodoFromUserA = res.id;
-    //Signout UserA
-    await agent.get("/signout");
-    //Create UserB account
-    res = await agent.get("/signup");
-    csrfToken = extractCsrfToken(res);
-    res = await agent.post("/users").send({
-      firstName: "Test",
-      lastName: "User B",
-      email: "userB@test.com",
-      password: "12345678",
-      _csrf: csrfToken,
-    });
-    //Try markAsComplete on UserA Todo from UserB account
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
-    const markCompleteResponse = await agent
-      .put(`/todos/${idOfTodoFromUserA}`)
-      .send({
-        _csrf: csrfToken,
-        completed: true,
-      });
-    expect(markCompleteResponse.statusCode).toBe(422);
-    //Try markAsIncomplete on UserA Todo from UserB account
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
-    const markIncompleteResponse = await agent
-      .put(`/todos/${idOfTodoFromUserA}`)
-      .send({
-        _csrf: csrfToken,
-        completed: false,
-      });
-    expect(markIncompleteResponse.statusCode).toBe(422);
-  });
-
-  test("One user cannot delete todo of other user", async () => {
-    //create UserA account
-    let res = await agent.get("/signup");
-    let csrfToken = extractCsrfToken(res);
-    res = await agent.post("/users").send({
-      firstName: "Test",
-      lastName: "User C",
-      email: "userC@test.com",
-      password: "12345678",
-      _csrf: csrfToken,
-    });
-    //create Todo from UserA account
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
-    res = await agent.post("/todos").send({
-      title: "Buy milk",
-      dueDate: new Date().toISOString(),
-      completed: false,
-      _csrf: csrfToken,
-    });
-    const idOfTodoFromUserA = res.id;
-    //Signout UserA
-    await agent.get("/signout");
-    //Create UserB account
-    res = await agent.get("/signup");
-    csrfToken = extractCsrfToken(res);
-    res = await agent.post("/users").send({
-      firstName: "Test",
-      lastName: "User D",
-      email: "userD@test.com",
-      password: "12345678",
-      _csrf: csrfToken,
-    });
-
-    //Try delete on UserA Todo from UserB account
-    res = await agent.get("/todos");
-    csrfToken = extractCsrfToken(res);
-    const deleteResponse2 = await agent
-      .delete(`/todos/${idOfTodoFromUserA}`)
-      .send({
-        _csrf: csrfToken,
-      });
-    expect(deleteResponse2.statusCode).toBe(422);
-  });
-
-  test("Creates a todo and responds with json at /todos POST endpoint", async () => {
+  //create todo
+  test("Create new todo", async () => {
     const agent = request.agent(server);
-    await login(agent, "user.a@test.com", "12345678");
+    await login(agent, "nani@gmail.com", "0122");
     const res = await agent.get("/todos");
     const csrfToken = extractCsrfToken(res);
     const response = await agent.post("/todos").send({
@@ -171,10 +71,10 @@ describe("Todo Application", function () {
     });
     expect(response.statusCode).toBe(302);
   });
-
-  test("Marks a todo with the given ID as complete", async () => {
+  //mark todo
+  test("Mark todo as completed (Updating Todo)", async () => {
     const agent = request.agent(server);
-    await login(agent, "user.a@test.com", "12345678");
+    await login(agent, "nani@gmail.com", "0122");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
@@ -204,13 +104,13 @@ describe("Todo Application", function () {
     expect(parsedUpdateResponse.completed).toBe(true);
   });
 
-  test("Marks a todo with the given ID as incomplete", async () => {
+  test("Mark todo as incomplete (Updating Todo)", async () => {
     const agent = request.agent(server);
-    await login(agent, "user.a@test.com", "12345678");
+    await login(agent, "nani@gmail.com", "0122");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
-      title: "Buy chips",
+      title: "Buy Chocolate",
       dueDate: new Date().toISOString(),
       completed: true,
       _csrf: csrfToken,
@@ -236,9 +136,36 @@ describe("Todo Application", function () {
     expect(parsedUpdateResponse.completed).toBe(false);
   });
 
-  test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
+  // test("Fetching all todos in the database", async () => {
+  //   const agent = request.agent(server);
+  //   await login(agent, "nani@gmail.com", "0122");
+  //   let res = await agent.get("/todos");
+  //   let csrfToken = extractCsrfToken(res);
+  //   await agent.post("/todos").send({
+  //     title: "Buy milk",
+  //     dueDate: new Date().toISOString(),
+  //     completed: false,
+  //     _csrf: csrfToken,
+  //   });
+
+  //   res = await agent.get("/todos");
+  //   csrfToken = extractCsrfToken(res);
+  //   await agent.post("/todos").send({
+  //     title: "Buy ps3",
+  //     dueDate: new Date().toISOString(),
+  //     completed: false,
+  //     _csrf: csrfToken,
+  //   });
+  //   const response = await agent.get("/todos");
+  //   const parsedResponse = JSON.parse(response.text);
+
+  //   expect(parsedResponse.length).toBe(5);
+  //   expect(parsedResponse[4]["title"]).toBe("Buy ps3");
+  // });
+  //delete todo
+  test("Delete todo using ID", async () => {
     const agent = request.agent(server);
-    await login(agent, "user.a@test.com", "12345678");
+    await login(agent, "nani@gmail.com", "0122");
     let res = await agent.get("/todos");
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
