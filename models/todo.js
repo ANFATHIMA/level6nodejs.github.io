@@ -3,16 +3,13 @@ const { Op, where } = require("sequelize");
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    
     static associate(models) {
+       // define association here
       Todo.belongsTo(models.User, {
         foreignKey: "userID",
       });
-      // define association here
+     
     }
 
     static addTodo({ title, dueDate, userID }) {
@@ -22,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
         completed: false,
         userID,
       });
-      // define association here
     }
 
     static getTodos(userID) {
@@ -31,7 +27,6 @@ module.exports = (sequelize, DataTypes) => {
           userID,
         },
       });
-      // define association here
     }
 
     static async overDue(userID) {
@@ -45,7 +40,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         order: [["id", "ASC"]],
       });
-      // define association here
     }
 
     static async dueToday(userID) {
@@ -59,9 +53,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         order: [["id", "ASC"]],
       });
-      // define association here
     }
-//the user id should  be unique and sent as a parameter to the function such that only for those whom the data should be visible will be shown
+
     static async dueLater(userID) {
       return await Todo.findAll({
         where: {
